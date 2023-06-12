@@ -233,9 +233,10 @@ class RRHFTrainer(Trainer):
     def gather_logits_labels(self, logits, labels):
 
         mask = (labels != -100).float()
-        new_logits = logits.clone()  # Create a copy to avoid in-place modification
-        labels[labels == -100] = 0 
-        output = torch.gather(new_logits, dim=-1, index=labels.unsqueeze(-1)).squeeze(-1)
+        #new_logits = logits.clone()  # Create a copy to avoid in-place modification
+        new_labels = labels.clone()
+        new_labels[new_labels == -100] = 0 
+        output = torch.gather(logists, dim=-1, index=new_labels.unsqueeze(-1)).squeeze(-1)
         output = output * mask # B * L
         return output
 
